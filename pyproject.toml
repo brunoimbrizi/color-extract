@@ -1,0 +1,83 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "color-extractor"
+version = "1.0.0"
+description = "Extract dominant colors from images using various K-Means clustering approaches"
+readme = "README.md"
+requires-python = ">=3.7"
+license = "MIT"
+authors = [
+    {name = "Bruno Imbrizi", email = "your.email@example.com"}
+]
+maintainers = [
+    {name = "Bruno Imbrizi", email = "your.email@example.com"}
+]
+keywords = [
+    "color",
+    "color-extraction",
+    "dominant-colors",
+    "palette",
+    "image-processing",
+    "kmeans",
+    "clustering",
+    "touchdesigner"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Science/Research",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Multimedia :: Graphics :: Graphics Conversion",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "numpy>=1.19.0",
+    "scikit-learn>=0.24.0",
+    "scikit-image>=0.18.0",
+    "Pillow>=8.0.0",
+    "matplotlib>=3.3.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "pytest-cov>=2.0",
+    "black>=21.0",
+    "flake8>=3.9",
+    "mypy>=0.900",
+    "twine>=3.4",
+    "wheel>=0.36",
+    "build>=0.7",
+]
+
+[project.urls]
+Homepage = "https://github.com/brunoimbrizi/color-extractor"
+Documentation = "https://github.com/brunoimbrizi/color-extractor#readme"
+Repository = "https://github.com/brunoimbrizi/color-extractor.git"
+"Bug Tracker" = "https://github.com/brunoimbrizi/color-extractor/issues"
+
+[project.scripts]
+color-extractor = "color_extractor.cli:main"
+
+[tool.setuptools]
+packages = ["color_extractor"]
+
+[tool.setuptools.package-data]
+color_extractor = ["py.typed"]
+
+[tool.basedpyright]
+typeCheckingMode = "off"
