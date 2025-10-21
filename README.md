@@ -6,6 +6,11 @@
 
 A toolkit to extract dominant colors from images using various K-Means clustering approaches.
 
+| Disc [by tatasz](https://www.deviantart.com/tatasz/art/Disc-676213672) | OilDrums (TouchDesigner asset) | Foggy cityscape (Midjourney) |
+| --- | --- | --- |
+| ![Disc](./output/palette_disc_by_tatasz_db6llt4-pre_all_6.png) | ![OilDrums](./output/palette_OilDrums_all_6.png) | ![Foggy](./output/palette_Additional_847_all_6.png) |
+
+
 ## Features
 
 **Extraction Methods**
@@ -187,3 +192,9 @@ fig = plot_comparison(img, img_array, algorithms_dict, 'comparison.png')
 # Create simple palette image
 palette_array = create_color_palette_image(colors, width=100, height=100)
 ```
+
+
+## Further Reading
+
+* [New Approach to Dominant and Prominent Color Extraction in Images with a Wide Range of Hues](https://www.mdpi.com/2227-7080/13/6/230)
+* [Dominant Colors with (not just) K-Means](https://tatasz.github.io/dominant_colors/)
