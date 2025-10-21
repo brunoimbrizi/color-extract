@@ -52,10 +52,10 @@ def extract_colors(image, method='lab', n_colors=6, sort_by='x-axis'):
         List of RGB color tuples
 
     Example:
-        >>> import color_extractor
-        >>> colors = color_extractor.extract_colors('image.jpg', method='lab', n_colors=5)
+        >>> import color_extract
+        >>> colors = color_extract.extract_colors('image.jpg', method='lab', n_colors=5)
         >>> for color in colors:
-        ...     print(color_extractor.rgb_to_hex(color))
+        ...     print(color_extract.rgb_to_hex(color))
     """
     import numpy as np
 

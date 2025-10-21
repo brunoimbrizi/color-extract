@@ -2,7 +2,7 @@ include README.md
 include LICENSE
 include requirements.txt
 include pyproject.toml
-recursive-include color_extractor *.py
+recursive-include color_extract *.py
 recursive-include examples *.py *.md *.jpg
 recursive-include tests *.py
 global-exclude __pycache__

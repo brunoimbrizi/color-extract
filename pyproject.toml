@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0,<70.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "color-extractor"
+name = "color-extract"
 version = "0.0.1"
 description = "Extract dominant colors from images using various K-Means clustering approaches"
 readme = "README.md"
@@ -65,19 +65,19 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/brunoimbrizi/color-extractor"
-Documentation = "https://github.com/brunoimbrizi/color-extractor#readme"
-Repository = "https://github.com/brunoimbrizi/color-extractor.git"
-"Bug Tracker" = "https://github.com/brunoimbrizi/color-extractor/issues"
+Homepage = "https://github.com/brunoimbrizi/color-extract"
+Documentation = "https://github.com/brunoimbrizi/color-extract#readme"
+Repository = "https://github.com/brunoimbrizi/color-extract.git"
+"Bug Tracker" = "https://github.com/brunoimbrizi/color-extract/issues"
 
 [project.scripts]
-color-extractor = "color_extractor.cli:main"
+color-extract = "color_extract.cli:main"
 
 [tool.setuptools]
-packages = ["color_extractor"]
+packages = ["color_extract"]
 
 [tool.setuptools.package-data]
-color_extractor = ["py.typed"]
+color_extract = ["py.typed"]
 
 [tool.basedpyright]
 typeCheckingMode = "off"

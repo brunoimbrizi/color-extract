@@ -18,10 +18,10 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  color-extractor photo.jpg
-  color-extractor photo.jpg --colors 8
-  color-extractor photo.jpg --method lab
-  color-extractor photo.jpg --method all --output comparison.png
+  color-extract photo.jpg
+  color-extract photo.jpg --colors 8
+  color-extract photo.jpg --method lab
+  color-extract photo.jpg --method all --output comparison.png
 
 Available methods:
   kmeans      - Original K-Means

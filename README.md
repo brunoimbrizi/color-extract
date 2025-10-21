@@ -1,7 +1,7 @@
 # Color Extractor
 
-[![PyPI version](https://badge.fury.io/py/color-extractor.svg)](https://badge.fury.io/py/color-extractor)
-[![Python Support](https://img.shields.io/pypi/pyversions/color-extractor.svg)](https://pypi.org/project/color-extractor/)
+[![PyPI version](https://badge.fury.io/py/color-extract.svg)](https://badge.fury.io/py/color-extract)
+[![Python Support](https://img.shields.io/pypi/pyversions/color-extract.svg)](https://pypi.org/project/color-extract/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A toolkit to extract dominant colors from images using various K-Means clustering approaches.
@@ -27,31 +27,31 @@ A toolkit to extract dominant colors from images using various K-Means clusterin
 ## Installation
 
 ```bash
-pip install color-extractor
+pip install color-extract
 ```
 
 ## Command Line Usage
 
 Basic extraction with default settings:
 ```bash
-color-extractor image.jpg
+color-extract image.jpg
 ```
 
 Extract 8 colors using the vibrant method:
 ```bash
-color-extractor image.jpg --colors 8 --method vibrant
+color-extract image.jpg --colors 8 --method vibrant
 ```
 
 Compare all methods:
 ```bash
-color-extractor image.jpg --method all --output comparison.png
+color-extract image.jpg --method all --output comparison.png
 ```
 
 ## CLI Options
 
 ```
 usage:
-  color-extractor [options] image
+  color-extract [options] image
 
 Arguments:
   image                Path to the input image
@@ -70,26 +70,26 @@ Options:
 ## Python API Usage
 
 ```python
-import color_extractor
+import color_extract
 import numpy as np
 from PIL import Image
 
 # Simple extraction from file
-colors = color_extractor.extract_colors('image.jpg', method='lab', n_colors=5)
+colors = color_extract.extract_colors('image.jpg', method='lab', n_colors=5)
 for color in colors:
-    print(color_extractor.rgb_to_hex(color))
+    print(color_extract.rgb_to_hex(color))
 
 # Use with numpy array
 img = Image.open('image.jpg')
 img_array = np.array(img)
-colors = color_extractor.extract_colors(img_array, method='aggressive')
+colors = color_extract.extract_colors(img_array, method='aggressive')
 
 # Advanced usage with visualization
-from color_extractor import plot_single_result, load_and_prepare_image
+from color_extract import plot_single_result, load_and_prepare_image
 
 img, img_array = load_and_prepare_image('image.jpg')
-colors = color_extractor.extract_colors_lab_enhanced(img_array, n_colors=6)
-sorted_colors = color_extractor.sort_colors_by_spatial_position(img_array, colors)
+colors = color_extract.extract_colors_lab_enhanced(img_array, n_colors=6)
+sorted_colors = color_extract.sort_colors_by_spatial_position(img_array, colors)
 
 # Generate visualization
 plot_single_result(img, img_array, sorted_colors, 'LAB Enhanced', 'output.png')
@@ -99,24 +99,24 @@ plot_single_result(img, img_array, sorted_colors, 'LAB Enhanced', 'output.png')
 
 ```python
 # In TouchDesigner, use with TOP operators
-import color_extractor
+import color_extract
 
 def extract_from_top(top):
     # Get pixels from TOP (TouchDesigner returns 0-1 range)
     pixels = top.numpyArray(delayed=True)
 
     # Convert to 0-255 range
-    img_array = color_extractor.normalize_image_array(
+    img_array = color_extract.normalize_image_array(
         pixels,
         input_range=(0, 1),
         output_range=(0, 255)
     )
 
     # Extract colors
-    colors = color_extractor.extract_colors(img_array, method='lab')
+    colors = color_extract.extract_colors(img_array, method='lab')
 
     # Convert to hex for use in TouchDesigner
-    hex_colors = [color_extractor.rgb_to_hex(c) for c in colors]
+    hex_colors = [color_extract.rgb_to_hex(c) for c in colors]
 
     return hex_colors
 ```
