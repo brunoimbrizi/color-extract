@@ -1,4 +1,4 @@
-# Color Extractor
+# Color Extract
 
 [![PyPI version](https://badge.fury.io/py/color-extract.svg)](https://badge.fury.io/py/color-extract)
 [![Python Support](https://img.shields.io/pypi/pyversions/color-extract.svg)](https://pypi.org/project/color-extract/)
