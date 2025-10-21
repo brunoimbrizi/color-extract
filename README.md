@@ -6,9 +6,9 @@
 
 A toolkit to extract dominant colors from images using various K-Means clustering approaches.
 
-| Disc [by tatasz](https://www.deviantart.com/tatasz/art/Disc-676213672) | OilDrums (TouchDesigner asset) | Foggy cityscape (Midjourney) |
+| Example A | Example B | Example C |
 | --- | --- | --- |
-| ![Disc](./output/palette_disc_by_tatasz_db6llt4-pre_all_6.png) | ![OilDrums](./output/palette_OilDrums_all_6.png) | ![Foggy](./output/palette_Additional_847_all_6.png) |
+| <img src="./output/palette_Additional_073_all_6.png" width=300> | <img src="./output/palette_OilDrums_all_6.png" width=300> | <img src="./output/palette_Additional_847_all_6.png" width=300> |
 
 
 ## Features
