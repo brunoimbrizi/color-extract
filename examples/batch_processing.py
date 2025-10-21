@@ -32,22 +32,27 @@ def process_image_directory(directory_path, output_file='color_catalog.json'):
         print(f"\nProcessing: {image_path.name}")
         
         try:
-            # Extract colors with statistics
-            colors, stats = color_extractor.extract_colors(
-                str(image_path),
+            # Load and prepare image
+            _, img_array = color_extractor.load_and_prepare_image(str(image_path))
+
+            # Extract colors
+            colors = color_extractor.extract_colors(
+                img_array,
                 method='lab',
                 n_colors=5,
-                sort_by='spatial-x',
-                return_stats=True
+                sort_by='spatial-x'
             )
-            
+
+            # Calculate statistics
+            stats = color_extractor.calculate_color_statistics(img_array, colors)
+
             # Store results
             results[image_path.name] = {
                 'colors': [stat['hex'] for stat in stats],
                 'statistics': stats,
                 'dominant_color': stats[0]['hex'] if stats else None
             }
-            
+
             print(f"  Dominant color: {stats[0]['hex']}")
             
         except Exception as e:
@@ -162,31 +167,36 @@ def create_html_palette_viewer(catalog_file='color_catalog.json', output_file='p
 def compare_methods_on_image(image_path, output_path='method_comparison.json'):
     """
     Compare all extraction methods on a single image.
-    
+
     Args:
         image_path: Path to the image
         output_path: Output file for comparison results
     """
     methods = ['kmeans', 'aggressive', 'vibrant', 'lab', 'multistage']
     results = {}
-    
+
     print(f"Comparing extraction methods on: {image_path}")
-    
+
+    # Load and prepare image once
+    _, img_array = color_extractor.load_and_prepare_image(image_path)
+
     for method in methods:
         print(f"\nTesting method: {method}")
-        colors, stats = color_extractor.extract_colors(
-            image_path,
+        colors = color_extractor.extract_colors(
+            img_array,
             method=method,
             n_colors=6,
-            sort_by='spatial-x',
-            return_stats=True
+            sort_by='spatial-x'
         )
-        
+
+        # Calculate statistics
+        stats = color_extractor.calculate_color_statistics(img_array, colors)
+
         results[method] = {
             'colors': [stat['hex'] for stat in stats],
             'dominant': stats[0] if stats else None
         }
-        
+
         print(f"  Colors: {', '.join(stat['hex'] for stat in stats[:3])}...")
     
     # Save comparison

@@ -34,22 +34,13 @@ Available methods:
     )
 
     parser.add_argument('image', help='Path to the input image')
-    parser.add_argument('--colors', '-c', type=int, default=6,
-                       help='Number of colors to extract (default: 6)')
-    parser.add_argument('--method', '-m', default='lab',
-                       choices=list(EXTRACTION_METHODS.keys()) + ['all'],
-                       help='Extraction method (default: lab)')
-    parser.add_argument('--output', '-o', default=None,
-                       help='Output file path (default: palette_{input_name}.png)')
-    parser.add_argument('--no-plot', action='store_true',
-                       help='Disable plot generation (console output only)')
-    parser.add_argument('--sort', choices=['spatial-x', 'spatial-y', 'frequency', 'none'],
-                       default='spatial-x',
-                       help='Color sorting method (default: spatial-x)')
-    parser.add_argument('--max-dimension', type=int, default=64,
-                       help='Maximum dimension for image downscaling (default: 64)')
-    parser.add_argument('--dpi', type=int, default=150,
-                       help='DPI for output plots (default: 150)')
+    parser.add_argument('--colors', '-c', type=int, default=6, help='Number of colors to extract (default: 6)')
+    parser.add_argument('--method', '-m', default='lab', choices=list(EXTRACTION_METHODS.keys()) + ['all'], help='Extraction method (default: lab)')
+    parser.add_argument('--output', '-o', default=None, help='Output file path (default: palette_{input_name}.png)')
+    parser.add_argument('--no-plot', action='store_true', help='Disable plot generation (console output only)')
+    parser.add_argument('--sort', choices=['spatial-x', 'spatial-y', 'frequency'], default='spatial-x', help='Color sorting method (default: spatial-x)')
+    parser.add_argument('--max-dimension', type=int, default=64, help='Maximum dimension for image downscaling (default: 64)')
+    parser.add_argument('--dpi', type=int, default=150, help='DPI for output plots (default: 150)')
 
     args = parser.parse_args()
 
@@ -80,10 +71,8 @@ Available methods:
                 sorted_colors = sort_colors_by_spatial_position(img_array, colors, axis='x')
             elif args.sort == 'spatial-y':
                 sorted_colors = sort_colors_by_spatial_position(img_array, colors, axis='y')
-            elif args.sort == 'frequency':
-                sorted_colors = colors  # Already sorted by frequency from extraction
             else:
-                sorted_colors = colors
+                sorted_colors = colors  # Already sorted by frequency from extraction
 
             algorithms_dict[display_name] = sorted_colors
             print_color_results(sorted_colors, display_name)
@@ -104,11 +93,9 @@ Available methods:
         elif args.sort == 'spatial-y':
             sorted_colors = sort_colors_by_spatial_position(img_array, colors, axis='y')
             print("Colors sorted by spatial position (top→bottom)")
-        elif args.sort == 'frequency':
-            sorted_colors = colors
-            print("Colors sorted by frequency")
         else:
             sorted_colors = colors
+            print("Colors sorted by frequency")
 
         print_color_results(sorted_colors, display_name)
 

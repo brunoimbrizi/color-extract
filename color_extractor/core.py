@@ -21,7 +21,7 @@ def extract_colors_kmeans_original(img_array, n_colors=6):
     """
     pixels = img_array.reshape(-1, 3).astype(np.float32)
 
-    rng = np.random.default_rng(seed=222)
+    rng = np.random.default_rng(seed=42)
 
     n_samples = min(20000, len(pixels))
     sample_indices = rng.choice(len(pixels), n_samples, replace=False)
@@ -87,7 +87,7 @@ def extract_colors_vibrant_separate(img_array, n_colors=6, n_vibrant=3, saturati
     """
     pixels = img_array.reshape(-1, 3).astype(np.float32)
 
-    rng = np.random.default_rng(seed=222)
+    rng = np.random.default_rng(seed=333)
 
     n_samples = min(20000, len(pixels))
     sample_indices = rng.choice(len(pixels), n_samples, replace=False)
@@ -148,7 +148,7 @@ def extract_colors_lab_enhanced(img_array, n_colors=6, saturation_boost=5.0):
     weights = 1.0 + (saturations ** 2) * saturation_boost
     probabilities = weights / weights.sum()
 
-    rng = np.random.default_rng(seed=222)
+    rng = np.random.default_rng(seed=444)
 
     n_samples = min(15000, len(pixels))
     indices = rng.choice(len(pixels), size=n_samples, replace=True, p=probabilities)
@@ -178,7 +178,7 @@ def extract_colors_multistage(img_array, n_colors=6):
     """
     pixels = img_array.reshape(-1, 3).astype(np.float32)
 
-    rng = np.random.default_rng(seed=222)
+    rng = np.random.default_rng(seed=555)
 
     n_samples = min(20000, len(pixels))
     sample_indices = rng.choice(len(pixels), n_samples, replace=False)

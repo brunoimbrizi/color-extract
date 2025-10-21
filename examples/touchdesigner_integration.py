@@ -114,14 +114,16 @@ class ColorExtractorExt:
             img_array = np.array(img)
         
         # Extract colors
-        self.colors, self.stats = color_extractor.extract_colors(
+        self.colors = color_extractor.extract_colors(
             img_array,
             method=self.method,
             n_colors=self.n_colors,
-            sort_by=self.sort_by,
-            return_stats=True
+            sort_by=self.sort_by
         )
-        
+
+        # Calculate statistics
+        self.stats = color_extractor.calculate_color_statistics(img_array, self.colors)
+
         # Convert to hex
         self.hex_colors = [color_extractor.rgb_to_hex(c) for c in self.colors]
         
