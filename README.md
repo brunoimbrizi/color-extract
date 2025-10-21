@@ -18,7 +18,6 @@ A toolkit to extract dominant colors from images using various K-Means clusterin
 **Sorting**
 - Spatial sorting (left-to-right or top-to-bottom)
 - Frequency-based sorting
-- Custom sorting options
 
 ## Installation
 
@@ -26,9 +25,7 @@ A toolkit to extract dominant colors from images using various K-Means clusterin
 pip install color-extractor
 ```
 
-## Quick Start
-
-### Command Line Usage
+## Command Line Usage
 
 Basic extraction with default settings:
 ```bash
@@ -45,17 +42,27 @@ Compare all methods:
 color-extractor image.jpg --method all --output comparison.png
 ```
 
-Advanced options:
-```bash
-color-extractor image.jpg \
-    --colors 6 \
-    --method lab \
-    --sort spatial-x \
-    --output palette.png \
-    --dpi 300 \
+## CLI Options
+
+```
+usage:
+  color-extractor [options] image
+
+Arguments:
+  image                Path to the input image
+
+Options:
+  -h, --help           Show help message
+  --colors, -c         Number of colors to extract (default: 6)
+  --method, -m         Extraction method (default: lab)
+  --output, -o         Output file path
+  --no-plot            Disable plot generation (console output only)
+  --sort               Color sorting: (default: x-axis)
+  --max-dimension      Max dimension for downscaling (default: 64)
+  --dpi                DPI for output plots (default: 150)
 ```
 
-### Python API Usage
+## Python API Usage
 
 ```python
 import color_extractor
@@ -83,7 +90,7 @@ sorted_colors = color_extractor.sort_colors_by_spatial_position(img_array, color
 plot_single_result(img, img_array, sorted_colors, 'LAB Enhanced', 'output.png')
 ```
 
-### TouchDesigner Integration
+## TouchDesigner Integration
 
 ```python
 # In TouchDesigner, use with TOP operators
@@ -109,21 +116,11 @@ def extract_from_top(top):
     return hex_colors
 ```
 
-## Extraction Methods Comparison
-
-| Method | Best For | Characteristics |
-|--------|----------|----------------|
-| **lab** (default) | General use | Perceptually uniform, balanced results |
-| **kmeans** | Fast extraction | Original K-Means, frequency-based |
-| **aggressive** | Vibrant images | Emphasizes saturated colors |
-| **vibrant** | Mixed content | Separates vibrant and muted colors |
-| **multistage** | Complex images | Two-stage extraction for variety |
-
 ## API Reference
 
 ### Main Functions
 
-#### `extract_colors(image, method='lab', n_colors=6, sort_by='spatial-x')`
+#### `extract_colors(image, method='lab', n_colors=6, sort_by='x-axis')`
 
 Main convenience function for color extraction.
 
@@ -131,7 +128,7 @@ Main convenience function for color extraction.
 - `image`: File path (str) or numpy array (H, W, 3)
 - `method`: Extraction method name
 - `n_colors`: Number of colors to extract
-- `sort_by`: Sorting method ('spatial-x', 'spatial-y', 'frequency', None)
+- `sort_by`: Sorting method ('x-axis', 'y-axis', 'frequency')
 
 **Returns:**
 - List of RGB tuples
@@ -190,68 +187,3 @@ fig = plot_comparison(img, img_array, algorithms_dict, 'comparison.png')
 # Create simple palette image
 palette_array = create_color_palette_image(colors, width=100, height=100)
 ```
-
-## CLI Options
-
-```
-usage: color-extractor [-h] [--colors COLORS] [--method METHOD] [--output OUTPUT]
-                       [--no-plot] [--sort SORT] [--max-dimension MAX_DIM]
-                       [--dpi DPI]
-                       image
-
-Arguments:
-  image                 Path to the input image
-
-Options:
-  -h, --help           Show help message
-  --colors, -c         Number of colors to extract (default: 6)
-  --method, -m         Extraction method (default: lab)
-  --output, -o         Output file path
-  --no-plot            Disable plot generation (console output only)
-  --sort               Color sorting: spatial-x, spatial-y, frequency, none
-  --max-dimension      Max dimension for downscaling (default: 64)
-  --dpi                DPI for output plots (default: 150)
-```
-
-## Performance Tips
-
-1. **Image Downscaling**: Large images are automatically downscaled for faster processing. Adjust with `--max-dimension`.
-
-2. **Method Selection**:
-   - Use `kmeans` for fastest extraction
-   - Use `lab` (default) for best perceptual results
-   - Use `aggressive` or `vibrant` for images with subtle accent colors
-
-3. **Batch Processing**:
-```python
-import glob
-import color_extractor
-
-for image_path in glob.glob('images/*.jpg'):
-    colors = color_extractor.extract_colors(image_path, n_colors=5)
-    # Process colors...
-```
-
-## Requirements
-
-- Python >= 3.7
-- numpy >= 1.19.0
-- scikit-learn >= 0.24.0
-- scikit-image >= 0.18.0
-- Pillow >= 8.0.0
-- matplotlib >= 3.3.0
-
-## License
-
-MIT License - see LICENSE file for details.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## Acknowledgments
-
-- Inspired by the need for better color extraction in creative coding
-- Built for compatibility with TouchDesigner and general Python usage
-- Uses scikit-learn for robust K-Means clustering
-- Claude generated docs and project structure

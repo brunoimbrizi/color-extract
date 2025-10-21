@@ -36,13 +36,15 @@ Available methods:
     parser.add_argument('image', help='Path to the input image')
     parser.add_argument('--colors', '-c', type=int, default=6, help='Number of colors to extract (default: 6)')
     parser.add_argument('--method', '-m', default='lab', choices=list(EXTRACTION_METHODS.keys()) + ['all'], help='Extraction method (default: lab)')
-    parser.add_argument('--output', '-o', default=None, help='Output file path (default: palette_{input_name}.png)')
+    parser.add_argument('--output', '-o', default=None, help='Output file path (default: palette_{input_name}_{method}_{colors}.png)')
     parser.add_argument('--no-plot', action='store_true', help='Disable plot generation (console output only)')
-    parser.add_argument('--sort', choices=['spatial-x', 'spatial-y', 'frequency'], default='spatial-x', help='Color sorting method (default: spatial-x)')
+    parser.add_argument('--sort', choices=['x-axis', 'y-axis', 'frequency'], default='x-axis', help='Color sorting method (default: x-axis)')
     parser.add_argument('--max-dimension', type=int, default=64, help='Maximum dimension for image downscaling (default: 64)')
     parser.add_argument('--dpi', type=int, default=150, help='DPI for output plots (default: 150)')
 
     args = parser.parse_args()
+
+    print('are we here ----??')
 
     # Generate safe output filename if not specified and plotting is enabled
     if not args.no_plot and args.output is None:
@@ -50,7 +52,7 @@ Available methods:
         base_name = os.path.splitext(os.path.basename(args.image))[0]
         # Remove or replace unsafe characters
         safe_name = re.sub(r'[^\w\-]', '_', base_name)
-        args.output = f'{safe_name}_{args.method}_{args.colors}.png'
+        args.output = f'palette_{safe_name}_{args.method}_{args.colors}.png'
 
     # Load image
     print(f"Loading image: {args.image}")
@@ -67,9 +69,9 @@ Available methods:
             colors = func(img_array, args.colors)
 
             # Apply sorting
-            if args.sort == 'spatial-x':
+            if args.sort == 'x-axis':
                 sorted_colors = sort_colors_by_spatial_position(img_array, colors, axis='x')
-            elif args.sort == 'spatial-y':
+            elif args.sort == 'y-axis':
                 sorted_colors = sort_colors_by_spatial_position(img_array, colors, axis='y')
             else:
                 sorted_colors = colors  # Already sorted by frequency from extraction
@@ -87,10 +89,10 @@ Available methods:
         colors = func(img_array, args.colors)
 
         # Apply sorting
-        if args.sort == 'spatial-x':
+        if args.sort == 'x-axis':
             sorted_colors = sort_colors_by_spatial_position(img_array, colors, axis='x')
             print("Colors sorted by spatial position (left→right)")
-        elif args.sort == 'spatial-y':
+        elif args.sort == 'y-axis':
             sorted_colors = sort_colors_by_spatial_position(img_array, colors, axis='y')
             print("Colors sorted by spatial position (top→bottom)")
         else:

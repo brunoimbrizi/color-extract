@@ -5,7 +5,7 @@ A comprehensive toolkit for color extraction with support for multiple algorithm
 spatial color sorting, and both CLI and programmatic usage.
 """
 
-__version__ = '1.0.0'
+__version__ = '0.0.1'
 __author__ = 'Bruno Imbrizi'
 __email__ = 'your.email@example.com'
 
@@ -38,7 +38,7 @@ from .visualization import (
 )
 
 # Main convenience function for easy API usage
-def extract_colors(image, method='lab', n_colors=6, sort_by='spatial-x'):
+def extract_colors(image, method='lab', n_colors=6, sort_by='x-axis'):
     """
     Extract dominant colors from an image.
 
@@ -46,7 +46,7 @@ def extract_colors(image, method='lab', n_colors=6, sort_by='spatial-x'):
         image: Either a file path (string) or a numpy array (H, W, 3) with RGB values 0-255
         method: Extraction method - 'kmeans', 'aggressive', 'vibrant', 'lab', or 'multistage'
         n_colors: Number of colors to extract
-        sort_by: How to sort colors - 'spatial-x', 'spatial-y', 'frequency', or None
+        sort_by: How to sort colors - 'x-axis', 'y-axis', or 'frequency'
 
     Returns:
         List of RGB color tuples
@@ -79,9 +79,9 @@ def extract_colors(image, method='lab', n_colors=6, sort_by='spatial-x'):
     colors = extraction_func(img_array, n_colors)
 
     # Sort colors if requested
-    if sort_by == 'spatial-x':
+    if sort_by == 'x-axis':
         colors = sort_colors_by_spatial_position(img_array, colors, axis='x')
-    elif sort_by == 'spatial-y':
+    elif sort_by == 'y-axis':
         colors = sort_colors_by_spatial_position(img_array, colors, axis='y')
     elif sort_by == 'frequency':
         pass  # Already sorted by frequency from extraction
