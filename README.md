@@ -2,7 +2,6 @@
 
 [![PyPI version](https://badge.fury.io/py/color-extract.svg)](https://badge.fury.io/py/color-extract)
 [![Python Support](https://img.shields.io/pypi/pyversions/color-extract.svg)](https://pypi.org/project/color-extract/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A toolkit to extract dominant colors from images using various K-Means clustering approaches.
 
@@ -13,11 +12,11 @@ A toolkit to extract dominant colors from images using various K-Means clusterin
 ## Features
 
 **Extraction Methods**
-- **Original K-Means**: Standard clustering approach
-- **LAB Enhanced**: Perceptually uniform color space (default)
-- **Aggressive Weighting**: Emphasizes vibrant colors
-- **Vibrant Separate**: Separate clustering for vibrant and base colors
-- **Multi-stage**: Extract vibrant colors first, then distinct base colors
+- **Original K-Means**: Standard K-Means clustering approach
+- **Aggressive Weighting**: K-Means with aggressive saturation weighting to emphasize vibrant colors
+- **Vibrant Separate**: Separate clustering for vibrant minority colors and base colors
+- **LAB Enhanced**: LAB color space with saturation-weighted sampling for perceptually uniform clustering
+- **Multi-stage**: Multi-stage extraction: vibrant colors first, then distinct base colors
 
 **Sorting**
 - Spatial sorting (left-to-right or top-to-bottom)
@@ -31,26 +30,35 @@ pip install color-extract
 
 ## Command Line Usage
 
-Basic extraction with default settings:
 ```bash
+# Basic extraction with default settings
 color-extract image.jpg
+
+# Extract 8 colors using the vibrant method
+color-extract image.jpg -c 8 -m vibrant
+
+# Compare all methods
+color-extract image.jpg -m all -o comparison.png
 ```
 
-Extract 8 colors using the vibrant method:
-```bash
-color-extract image.jpg --colors 8 --method vibrant
+### Example Output
 ```
+LAB Enhanced:
+========================================
+  1. #277595    RGB(39, 117, 149)
+  2. #68b2c6    RGB(104, 178, 198)
+  3. #6c6963    RGB(108, 105, 99)
+  4. #394d4d    RGB(57, 77, 77)
+  5. #782722    RGB(120, 39, 34)
+  6. #102937    RGB(16, 41, 55)
 
-Compare all methods:
-```bash
-color-extract image.jpg --method all --output comparison.png
+Result saved to palette_image_lab_6.png
 ```
 
 ## CLI Options
 
 ```
-usage:
-  color-extract [options] image
+usage: color-extract [options] image
 
 Arguments:
   image                Path to the input image
