@@ -2,11 +2,15 @@
 Visualization functions for color extraction results.
 """
 
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from rich import box
+
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 from . import rgb_to_hex
-
 
 def plot_single_result(img, img_array, colors, method_name, output_path=None, dpi=150):
     """
@@ -160,15 +164,26 @@ def print_color_results(colors, method_name):
         colors: List of extracted RGB colors
         method_name: Name of the extraction method
     """
-    print(f"\n{method_name}:")
-    print("=" * 40)
+    console = Console()
+
+    console.print(Panel(f"{method_name}", width=39, box=box.SQUARE, style="#AAAAAA"))
+
+    table = Table(show_header=False, style="#AAAAAA")
+    table.add_column("■■■", width=5, justify="center")
+    table.add_column("Hex", width=8)
+    table.add_column("RGB", width=16)
+
+    # print(f"\n{method_name}:")
+    # print("=" * 40)
 
     for i, color in enumerate(colors, 1):
         hex_code = rgb_to_hex(color)
-        rgb_str = f"RGB({int(color[0])}, {int(color[1])}, {int(color[2])})"
-        print(f"  {i}. {hex_code:10s} {rgb_str}")
+        rgb_str = f"({int(color[0])}, {int(color[1])}, {int(color[2])})"
+        # print(f"  {i}. {hex_code:10s} {rgb_str}")
+        table.add_row(f"[{hex_code}]■■■", f"{hex_code:10s}", rgb_str)
 
-    print("=" * 40)
+    # print("=" * 40)
+    console.print(table)
 
 
 def create_color_palette_image(colors, width=100, height=100):
