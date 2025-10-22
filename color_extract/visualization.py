@@ -144,65 +144,121 @@ def plot_comparison(img, img_array, algorithms_dict, output_path=None, dpi=150):
         dpi: DPI for the plot
 
     Returns:
-        matplotlib figure object
+        PIL Image object
     """
-    # Calculate figure size based on image dimensions
-    img_width_px, img_height_px = img.size
-
-    # Convert to inches
-    img_width_in = img_width_px / dpi
-    img_height_in = img_height_px / dpi
+    # Resize image to fit left column
+    max_img_width = 588
+    max_img_height = 392
+    img_copy = img.copy()
+    img_copy.thumbnail((max_img_width, max_img_height), Image.Resampling.LANCZOS)
+    img_width, img_height = img_copy.size
 
     # Number of methods to compare
     n_methods = len(algorithms_dict)
 
-    # Add space for each method's swatches
-    fig_width = img_width_in
-    fig_height = img_height_in + (n_methods * 2.0) + 1.0  # Image + methods + padding
+    # Dimensions for right column (palettes)
+    palette_width = max_img_width
+    palette_method_height = max_img_height // 5  # Height for each method's title + swatches
 
-    fig = plt.figure(figsize=(fig_width * 0.86, fig_height), dpi=dpi)
+    # Calculate dimensions
+    left_column_width = max_img_width + 40  # Image + margins
+    right_column_width = palette_width + 40
+    total_width = left_column_width + right_column_width
 
-    # Create gridspec: 1 row for image + n rows for methods
-    height_ratios = [img_height_in] + [2.0] * n_methods
-    gs = fig.add_gridspec(n_methods + 1, 1, height_ratios=height_ratios,
-                          hspace=0.3, left=0.05, right=0.95, top=0.95, bottom=0.05)
+    title_height = 60
+    total_height = max(
+        title_height + max_img_height + 40,  # Left column height
+        title_height + (n_methods * palette_method_height) + 40  # Right column height
+    )
 
-    # Show original image on top
-    ax_img = fig.add_subplot(gs[0])
-    ax_img.imshow(img)
-    ax_img.set_title('Original Image', fontsize=18, fontweight='bold', pad=10)
-    ax_img.axis('off')
+    # Create composite image
+    composite = Image.new('RGB', (total_width, total_height), color='white')
+    draw = ImageDraw.Draw(composite)
 
-    # Plot each method's color palette in rows below
-    for idx, (name, colors) in enumerate(algorithms_dict.items()):
-        ax = fig.add_subplot(gs[idx + 1])
-        ax.set_title(name, fontsize=18, fontweight='bold', pad=10)
-        ax.set_xlim(0, len(colors))
-        ax.set_ylim(0, 2)
-        ax.axis('off')
+    # Load font
+    FONT_PATH = os.path.join(os.path.dirname(__file__), 'fonts', 'IBMPlexMono-regular.ttf')
 
-        # Each swatch takes up 1 unit of width
-        swatch_width = 0.95
+    try:
+        title_font = ImageFont.truetype(FONT_PATH, 18)
+        method_font = ImageFont.truetype(FONT_PATH, 16)
+        hex_font = ImageFont.truetype(FONT_PATH, 11)
+    except Exception as e:
+        title_font = ImageFont.load_default()
+        method_font = ImageFont.load_default()
+        hex_font = ImageFont.load_default()
+
+    # Draw "Original Image" title (left column)
+    title_text = "Original Image"
+    title_bbox = draw.textbbox((0, 0), title_text, font=title_font)
+    title_width = title_bbox[2] - title_bbox[0]
+    title_x = (left_column_width - title_width) // 2
+    draw.text((title_x, 25), title_text, fill='black', font=title_font)
+
+    # Paste original image in left column (centered)
+    img_x = (left_column_width - img_width) // 2
+    img_y = title_height + (max_img_height - img_height) // 2
+    composite.paste(img_copy, (img_x, img_y))
+
+    # Draw color palettes in right column
+    palette_start_y = title_height
+
+    for idx, (method_name, colors) in enumerate(algorithms_dict.items()):
+        method_y = palette_start_y + (idx * palette_method_height)
+
+        # Draw method name
+        method_bbox = draw.textbbox((0, 0), method_name, font=method_font)
+        method_width = method_bbox[2] - method_bbox[0]
+        method_x = left_column_width + (right_column_width - method_width) // 2
+        draw.text((method_x, method_y + 5), method_name, fill='black', font=method_font)
+
+        # Calculate swatch dimensions
+        num_colors = len(colors)
+        swatch_height = 50
+        swatch_spacing = 6
+        swatches_total_width = palette_width - 40
+        swatch_width = (swatches_total_width - (num_colors - 1) * swatch_spacing) / num_colors
+
+        # Draw color swatches
+        swatch_y = method_y + 35
+        swatch_start_x = left_column_width + 20
 
         for i, color in enumerate(colors):
-            color_normalized = np.clip(np.array(color) / 255.0, 0, 1)
+            # Calculate position
+            x = swatch_start_x + i * (swatch_width + swatch_spacing)
 
-            # Draw color swatch
-            rect = Rectangle((i + 0.025, 0.6), swatch_width, 1.2,
-                           facecolor=color_normalized,
-                           linewidth=2)
-            ax.add_patch(rect)
+            # Ensure color values are valid integers
+            color_tuple = tuple(int(c) for c in color)
 
-            # Add hex code below swatch
+            # Draw swatch rectangle
+            draw.rectangle(
+                [(x, swatch_y), (x + swatch_width, swatch_y + swatch_height)],
+                fill=color_tuple
+            )
+
+            # Draw hex code below swatch
             hex_code = rgb_to_hex(color)
-            ax.text(i + 0.5, 0.4, hex_code,
-                   ha='center', va='top', fontsize=12, fontweight='bold')
+            hex_bbox = draw.textbbox((0, 0), hex_code, font=hex_font)
+            hex_width = swatch_width
+            hex_x = x + (swatch_width - hex_width) // 2 + 3
+            hex_y = swatch_y + swatch_height + 4
 
+            # Draw text with white background for better readability
+            padding = 3
+            text_bg_box = [
+                hex_x - padding,
+                hex_y - padding,
+                hex_x + hex_width - padding,
+                hex_y + (hex_bbox[3] - hex_bbox[1]) + padding * 2
+            ]
+            draw.rectangle(text_bg_box, fill='white', outline='lightgray')
+            draw.text((hex_x, hex_y), hex_code, fill='black', font=hex_font)
+
+    # Save if output path provided
     if output_path:
-        plt.savefig(output_path, dpi=dpi)
+        composite.save(output_path, dpi=(dpi, dpi))
         print(f"\nComparison saved to {output_path}")
 
-    return fig
+    return composite
 
 
 def print_color_results(colors, method_name):
