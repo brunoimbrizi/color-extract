@@ -8,8 +8,7 @@ A toolkit to extract dominant colors from images using various K-Means clusterin
 
 | Example A | Example B | Example C |
 | --- | --- | --- |
-| <img src="./output/palette_Additional_073_all_6.png" width=300> | <img src="./output/palette_OilDrums_all_6.png" width=300> | <img src="./output/palette_Additional_847_all_6.png" width=300> |
-
+| <img width="400" alt="palette_Additional_073_all_6" src="https://github.com/user-attachments/assets/8ab11547-8c88-4b6c-97cd-b192c4697686" /> | <img width="400" alt="palette_OilDrums_all_6" src="https://github.com/user-attachments/assets/93fb3716-c059-4148-9e51-69b46553e910" /> | <img width="400" alt="palette_Additional_847_all_6" src="https://github.com/user-attachments/assets/a59cce63-2b28-439e-b3b7-1851ed69e99e" /> |
 
 ## Features
 
@@ -93,32 +92,6 @@ sorted_colors = color_extract.sort_colors_by_spatial_position(img_array, colors)
 
 # Generate visualization
 plot_single_result(img, img_array, sorted_colors, 'LAB Enhanced', 'output.png')
-```
-
-## TouchDesigner Integration
-
-```python
-# In TouchDesigner, use with TOP operators
-import color_extract
-
-def extract_from_top(top):
-    # Get pixels from TOP (TouchDesigner returns 0-1 range)
-    pixels = top.numpyArray(delayed=True)
-
-    # Convert to 0-255 range
-    img_array = color_extract.normalize_image_array(
-        pixels,
-        input_range=(0, 1),
-        output_range=(0, 255)
-    )
-
-    # Extract colors
-    colors = color_extract.extract_colors(img_array, method='lab')
-
-    # Convert to hex for use in TouchDesigner
-    hex_colors = [color_extract.rgb_to_hex(c) for c in colors]
-
-    return hex_colors
 ```
 
 ## API Reference
