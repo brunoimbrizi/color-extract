@@ -7,9 +7,9 @@ from rich.panel import Panel
 from rich.table import Table
 from rich import box
 
+import os
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle
+from PIL import Image, ImageDraw, ImageFont
 from . import rgb_to_hex
 
 def plot_single_result(img, img_array, colors, method_name, output_path=None, dpi=150):
@@ -25,62 +25,111 @@ def plot_single_result(img, img_array, colors, method_name, output_path=None, dp
         dpi: DPI for the plot
 
     Returns:
-        matplotlib figure object
+        PIL Image object
     """
-    # Calculate figure size based on image dimensions
-    img_width_px, img_height_px = img.size
 
-    # Convert to inches
-    img_width_in = img_width_px / dpi
-    img_height_in = img_height_px / dpi
+    # Resize image
+    max_width = 840
+    max_height = 560
+    img.thumbnail((max_width, max_height), Image.Resampling.LANCZOS)
 
-    # Add space for titles and swatches
-    fig_width = img_width_in
-    fig_height = img_height_in + 2.5  # Extra space for title and swatches
+    # Get resized image dimensions
+    img_width, img_height = img.size
 
-    fig = plt.figure(figsize=(fig_width * 0.86, fig_height), dpi=dpi)
+    # Calculate dimensions for the composite image
+    num_colors = len(colors)
 
-    # Create gridspec with precise height ratios
-    gs = fig.add_gridspec(2, 1, height_ratios=[img_height_in, 2.5],
-                          hspace=0.3, left=0.05, right=0.95, top=0.95, bottom=0.05)
+    # Swatch dimensions
+    swatch_height = 60
+    swatch_spacing = 8
+    swatch_width = (max_width - swatch_spacing * (num_colors - 1)) / num_colors
 
-    # Show original image on top
-    ax_img = fig.add_subplot(gs[0])
-    ax_img.imshow(img)
-    ax_img.set_title('Original Image', fontsize=18, fontweight='bold', pad=10)
-    ax_img.axis('off')
+    # Title heights
+    title_height = 60
+    method_title_height = 60
 
-    # Show color palette below
-    ax_colors = fig.add_subplot(gs[1])
-    ax_colors.set_title(f'{method_name}', fontsize=18, fontweight='bold', pad=10)
+    # Calculate total height
+    total_height = title_height + max_height + method_title_height + swatch_height + 80
+    total_width = max_width + 40
+    margin_x = (total_width - img_width) // 2
 
-    # Use normalized coordinates (0 to len(colors)) for swatches
-    ax_colors.set_xlim(0, len(colors))
-    ax_colors.set_ylim(0, 2)
-    ax_colors.axis('off')
+    # Create new image with white background
+    composite = Image.new('RGB', (total_width, total_height), color='white')
+    draw = ImageDraw.Draw(composite)
 
-    # Each swatch takes up 1 unit of width
-    swatch_width = 0.95
+    FONT_PATH = os.path.join(os.path.dirname(__file__), 'fonts', 'IBMPlexMono-regular.ttf')
+
+    # Try to load a nice font, fall back to default if not available
+    try:
+        title_font = ImageFont.truetype(FONT_PATH, 18)
+        method_font = ImageFont.truetype(FONT_PATH, 18)
+        hex_font = ImageFont.truetype(FONT_PATH, 12)
+    except Exception as e:
+        title_font = ImageFont.load_default()
+        method_font = ImageFont.load_default()
+        hex_font = ImageFont.load_default()
+
+    # Draw "Original Image" title
+    title_text = "Original Image"
+    title_bbox = draw.textbbox((0, 0), title_text, font=title_font)
+    title_width = title_bbox[2] - title_bbox[0]
+    title_x = (total_width - title_width) // 2
+    draw.text((title_x, 25), title_text, fill='black', font=title_font)
+
+    # Paste original image
+    img_y = title_height + (max_height - img_height) // 2
+    composite.paste(img, (margin_x, img_y))
+
+    # Draw method name title
+    method_bbox = draw.textbbox((0, 0), method_name, font=method_font)
+    method_width = method_bbox[2] - method_bbox[0]
+    method_x = (total_width - method_width) // 2
+    method_y = title_height + max_height + 25
+    draw.text((method_x, method_y), method_name, fill='black', font=method_font)
+
+    # Draw color swatches
+    swatch_y = title_height + max_height + method_title_height
 
     for i, color in enumerate(colors):
-        color_normalized = np.clip(np.array(color) / 255.0, 0, 1)
+        # Calculate position
+        x = i * (swatch_width + swatch_spacing) + 20
 
-        # Draw color swatch
-        rect = Rectangle((i + 0.025, 0.6), swatch_width, 1.2,
-                       facecolor=color_normalized,
-                       linewidth=1)
-        ax_colors.add_patch(rect)
+        # Ensure color values are valid integers
+        color_tuple = tuple(int(c) for c in color)
 
-        # Add hex code below swatch
+        # Draw swatch rectangle
+        draw.rectangle(
+            [(x, swatch_y), (x + swatch_width, swatch_y + swatch_height)],
+            fill=color_tuple,
+            # outline='black',
+            # width=2
+        )
+
+        # Draw hex code below swatch
         hex_code = rgb_to_hex(color)
-        ax_colors.text(i + 0.5, 0.4, hex_code,
-                   ha='center', va='top', fontsize=12, fontweight='bold')
+        hex_bbox = draw.textbbox((0, 0), hex_code, font=hex_font)
+        # hex_width = hex_bbox[2] - hex_bbox[0]
+        hex_width = swatch_width
+        hex_x = x + (swatch_width - hex_width) // 2 + 4
+        hex_y = swatch_y + swatch_height + 10
 
+        # Draw text with white background for better readability
+        padding = 4
+        text_bg_box = [
+            hex_x - padding,
+            hex_y - padding,
+            hex_x + hex_width - padding,
+            hex_y + (hex_bbox[3] - hex_bbox[1]) + padding * 3
+        ]
+        draw.rectangle(text_bg_box, fill='white', outline='lightgray')
+        draw.text((hex_x, hex_y), hex_code, fill='black', font=hex_font)
+
+    # Save if output path provided
     if output_path:
-        plt.savefig(output_path, dpi=dpi)
+        composite.save(output_path, dpi=(dpi, dpi))
         print(f"\nResult saved to {output_path}")
 
-    return fig
+    return composite
 
 
 def plot_comparison(img, img_array, algorithms_dict, output_path=None, dpi=150):
