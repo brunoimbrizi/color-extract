@@ -161,12 +161,14 @@ def print_color_results(colors, method_name):
         method_name: Name of the extraction method
     """
     print(f"\n{method_name}:")
-    print("=" * 70)
+    print("=" * 40)
 
     for i, color in enumerate(colors, 1):
         hex_code = rgb_to_hex(color)
         rgb_str = f"RGB({int(color[0])}, {int(color[1])}, {int(color[2])})"
         print(f"  {i}. {hex_code:10s} {rgb_str}")
+
+    print("=" * 40)
 
 
 def create_color_palette_image(colors, width=100, height=100):

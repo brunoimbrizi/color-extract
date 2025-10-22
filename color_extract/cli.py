@@ -44,8 +44,6 @@ Available methods:
 
     args = parser.parse_args()
 
-    print('are we here ----??')
-
     # Generate safe output filename if not specified and plotting is enabled
     if not args.no_plot and args.output is None:
         # Get the base filename without path and extension
@@ -55,10 +53,10 @@ Available methods:
         args.output = f'palette_{safe_name}_{args.method}_{args.colors}.png'
 
     # Load image
-    print(f"Loading image: {args.image}")
+    # print(f"Loading image: {args.image}")
     img, img_array = load_and_prepare_image(args.image, args.max_dimension)
 
-    print(f"Extracting {args.colors} colors...")
+    # print(f"Extracting {args.colors} colors...")
 
     if args.method == 'all':
         # Run all methods and compare
@@ -85,19 +83,19 @@ Available methods:
     else:
         # Run single method
         display_name, func = EXTRACTION_METHODS[args.method]
-        print(f"Using method: {display_name}")
+        # print(f"Using method: {display_name}")
         colors = func(img_array, args.colors)
 
         # Apply sorting
         if args.sort == 'x-axis':
             sorted_colors = sort_colors_by_spatial_position(img_array, colors, axis='x')
-            print("Colors sorted by spatial position (left→right)")
+            # print("Colors sorted by spatial position (left→right)")
         elif args.sort == 'y-axis':
             sorted_colors = sort_colors_by_spatial_position(img_array, colors, axis='y')
-            print("Colors sorted by spatial position (top→bottom)")
+            # print("Colors sorted by spatial position (top→bottom)")
         else:
             sorted_colors = colors
-            print("Colors sorted by frequency")
+            # print("Colors sorted by frequency")
 
         print_color_results(sorted_colors, display_name)
 
@@ -105,7 +103,7 @@ Available methods:
             plot_single_result(img, img_array, sorted_colors, display_name,
                              args.output, dpi=args.dpi)
 
-    print("\nDone!")
+    # print("\nDone!")
 
 
 if __name__ == "__main__":

@@ -31,7 +31,7 @@ def load_and_prepare_image(image_path, max_dimension=64):
             ratio = max_dimension / max(width, height)
             new_size = (int(width * ratio), int(height * ratio))
             img = img.resize(new_size, Image.LANCZOS)
-            print(f"Downscaled image from {width}x{height} to {img.size[0]}x{img.size[1]}")
+            # print(f"Downscaled image from {width}x{height} to {img.size[0]}x{img.size[1]}")
 
         return original, np.array(img)
     except Exception as e:
