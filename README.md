@@ -6,7 +6,7 @@
 A toolkit to extract dominant colors from images using various K-Means clustering approaches.
 
 | Example |
-| :------ | 
+| :------ |
 | <img width="1256" alt="colors_Additional_073_all_6" src="https://github.com/user-attachments/assets/54c4f889-4195-4054-9f82-e098325745d0" /> |
 
 ## Features
@@ -41,24 +41,7 @@ color-extract image.jpg -c 8 -m vibrant
 color-extract image.jpg -m all -o ./my-folder
 ```
 
-### Example Output
-```
-┌─────────────────────────────────────┐
-│ LAB Enhanced                        │
-└─────────────────────────────────────┘
-┌───────┬──────────┬──────────────────┐
-│  ■■■  │ #277595  │ (39, 117, 149)   │
-│  ■■■  │ #68b2c6  │ (104, 178, 198)  │
-│  ■■■  │ #6c6963  │ (108, 105, 99)   │
-│  ■■■  │ #394d4d  │ (57, 77, 77)     │
-│  ■■■  │ #782722  │ (120, 39, 34)    │
-│  ■■■  │ #102937  │ (16, 41, 55)     │
-└───────┴──────────┴──────────────────┘
-
-Result saved to output/colors_image_lab_6.png
-```
-
-## CLI Options
+### CLI Options
 
 ```
 usage: color-extract [options] image
@@ -77,7 +60,25 @@ Options:
   --dpi                DPI for output plots (default: 150)
 ```
 
-## More Examples
+## Output Examples
+
+### Console
+```
+┌─────────────────────────────────────┐
+│ LAB Enhanced                        │
+└─────────────────────────────────────┘
+┌───────┬──────────┬──────────────────┐
+│  ■■■  │ #277595  │ (39, 117, 149)   │
+│  ■■■  │ #68b2c6  │ (104, 178, 198)  │
+│  ■■■  │ #6c6963  │ (108, 105, 99)   │
+│  ■■■  │ #394d4d  │ (57, 77, 77)     │
+│  ■■■  │ #782722  │ (120, 39, 34)    │
+│  ■■■  │ #102937  │ (16, 41, 55)     │
+└───────┴──────────┴──────────────────┘
+Result saved to output/colors_image_lab_6.png
+```
+
+### Rendered Images
 
 | Aggressive Weighting | LAB Enhanced |
 | -------------------- | ------------ |

@@ -5,6 +5,7 @@ Command-line interface for color extraction.
 import argparse
 import os
 import re
+import time
 import pathlib
 
 from . import EXTRACTION_METHODS
@@ -44,6 +45,8 @@ Available methods:
     parser.add_argument('--dpi', type=int, default=150, help='DPI for output plots (default: 150)')
 
     args = parser.parse_args()
+
+    start_time = time.perf_counter()
 
     # Output path
     output_path = pathlib.Path(args.output or './output')
@@ -110,6 +113,8 @@ Available methods:
             plot_single_result(img, img_array, sorted_colors, args.method, display_name,
                              args.output, dpi=args.dpi)
 
+    elapsed_time = time.perf_counter() - start_time
+    print(f'Elapsed time: {elapsed_time:.3f}s')
     # print("\nDone!")
 
 

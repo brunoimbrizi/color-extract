@@ -128,7 +128,7 @@ def plot_single_result(img, img_array, colors, method_key, method_name, output_p
     # Save if output path provided
     if output_path:
         composite.save(output_path, dpi=(dpi, dpi))
-        print(f"\nResult saved to {output_path}")
+        print(f"Result saved to {output_path}")
 
     return composite
 
