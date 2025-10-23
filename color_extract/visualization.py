@@ -12,7 +12,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 from . import rgb_to_hex
 
-def plot_single_result(img, img_array, colors, method_name, output_path=None, dpi=150):
+def plot_single_result(img, img_array, colors, method_key, method_name, output_path=None, dpi=150):
     """
     Plot results for a single extraction method.
 
@@ -51,7 +51,7 @@ def plot_single_result(img, img_array, colors, method_name, output_path=None, dp
     # Calculate total height
     total_height = title_height + max_height + method_title_height + swatch_height + 80
     total_width = max_width + 40
-    margin_x = (total_width - img_width) // 2
+    img_x = (total_width - img_width) // 2
 
     # Create new image with white background
     composite = Image.new('RGB', (total_width, total_height), color='white')
@@ -70,7 +70,8 @@ def plot_single_result(img, img_array, colors, method_name, output_path=None, dp
         hex_font = ImageFont.load_default()
 
     # Draw "Original Image" title
-    title_text = "Original Image"
+    title_text = f"color-extract -c {num_colors} -m {method_key}"
+    # title_text = "Original Image"
     title_bbox = draw.textbbox((0, 0), title_text, font=title_font)
     title_width = title_bbox[2] - title_bbox[0]
     title_x = (total_width - title_width) // 2
@@ -78,7 +79,7 @@ def plot_single_result(img, img_array, colors, method_name, output_path=None, dp
 
     # Paste original image
     img_y = title_height + (max_height - img_height) // 2
-    composite.paste(img, (margin_x, img_y))
+    composite.paste(img, (img_x, img_y))
 
     # Draw method name title
     method_bbox = draw.textbbox((0, 0), method_name, font=method_font)
@@ -158,18 +159,15 @@ def plot_comparison(img, img_array, algorithms_dict, output_path=None, dpi=150):
 
     # Dimensions for right column (palettes)
     palette_width = max_img_width
-    palette_method_height = max_img_height // 5  # Height for each method's title + swatches
+    palette_method_height = (max_img_height + 50) // n_methods
 
     # Calculate dimensions
-    left_column_width = max_img_width + 40  # Image + margins
+    left_column_width = max_img_width + 40
     right_column_width = palette_width + 40
     total_width = left_column_width + right_column_width
 
     title_height = 60
-    total_height = max(
-        title_height + max_img_height + 40,  # Left column height
-        title_height + (n_methods * palette_method_height) + 40  # Right column height
-    )
+    total_height = title_height + max_img_height + 40
 
     # Create composite image
     composite = Image.new('RGB', (total_width, total_height), color='white')
@@ -179,28 +177,29 @@ def plot_comparison(img, img_array, algorithms_dict, output_path=None, dpi=150):
     FONT_PATH = os.path.join(os.path.dirname(__file__), 'fonts', 'IBMPlexMono-regular.ttf')
 
     try:
-        title_font = ImageFont.truetype(FONT_PATH, 18)
-        method_font = ImageFont.truetype(FONT_PATH, 16)
-        hex_font = ImageFont.truetype(FONT_PATH, 11)
+        title_font = ImageFont.truetype(FONT_PATH, 14)
+        method_font = ImageFont.truetype(FONT_PATH, 14)
     except Exception as e:
         title_font = ImageFont.load_default()
         method_font = ImageFont.load_default()
-        hex_font = ImageFont.load_default()
 
-    # Draw "Original Image" title (left column)
-    title_text = "Original Image"
-    title_bbox = draw.textbbox((0, 0), title_text, font=title_font)
-    title_width = title_bbox[2] - title_bbox[0]
-    title_x = (left_column_width - title_width) // 2
-    draw.text((title_x, 25), title_text, fill='black', font=title_font)
+    num_colors = len(next(iter(algorithms_dict.values())))
 
     # Paste original image in left column (centered)
     img_x = (left_column_width - img_width) // 2
     img_y = title_height + (max_img_height - img_height) // 2
     composite.paste(img_copy, (img_x, img_y))
 
+    # Draw title
+    title_text = f"color-extract -c {num_colors} -m all"
+    # title_bbox = draw.textbbox((0, 0), title_text, font=title_font)
+    title_x = img_x
+    title_y = 30
+    draw.text((title_x, title_y), title_text, fill='black', font=title_font)
+
+
     # Draw color palettes in right column
-    palette_start_y = title_height
+    palette_start_y = 20
 
     for idx, (method_name, colors) in enumerate(algorithms_dict.items()):
         method_y = palette_start_y + (idx * palette_method_height)
@@ -209,17 +208,17 @@ def plot_comparison(img, img_array, algorithms_dict, output_path=None, dpi=150):
         method_bbox = draw.textbbox((0, 0), method_name, font=method_font)
         method_width = method_bbox[2] - method_bbox[0]
         method_x = left_column_width + (right_column_width - method_width) // 2
-        draw.text((method_x, method_y + 5), method_name, fill='black', font=method_font)
+        draw.text((method_x, method_y + 15), method_name, fill='black', font=method_font)
 
         # Calculate swatch dimensions
         num_colors = len(colors)
-        swatch_height = 50
-        swatch_spacing = 6
-        swatches_total_width = palette_width - 40
+        swatch_height = 40
+        swatch_spacing = 4
+        swatches_total_width = palette_width
         swatch_width = (swatches_total_width - (num_colors - 1) * swatch_spacing) / num_colors
 
         # Draw color swatches
-        swatch_y = method_y + 35
+        swatch_y = method_y + 40
         swatch_start_x = left_column_width + 20
 
         for i, color in enumerate(colors):
@@ -235,23 +234,6 @@ def plot_comparison(img, img_array, algorithms_dict, output_path=None, dpi=150):
                 fill=color_tuple
             )
 
-            # Draw hex code below swatch
-            hex_code = rgb_to_hex(color)
-            hex_bbox = draw.textbbox((0, 0), hex_code, font=hex_font)
-            hex_width = swatch_width
-            hex_x = x + (swatch_width - hex_width) // 2 + 3
-            hex_y = swatch_y + swatch_height + 4
-
-            # Draw text with white background for better readability
-            padding = 3
-            text_bg_box = [
-                hex_x - padding,
-                hex_y - padding,
-                hex_x + hex_width - padding,
-                hex_y + (hex_bbox[3] - hex_bbox[1]) + padding * 2
-            ]
-            draw.rectangle(text_bg_box, fill='white', outline='lightgray')
-            draw.text((hex_x, hex_y), hex_code, fill='black', font=hex_font)
 
     # Save if output path provided
     if output_path:

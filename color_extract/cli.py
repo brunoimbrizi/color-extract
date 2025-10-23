@@ -100,7 +100,7 @@ Available methods:
         print_color_results(sorted_colors, display_name)
 
         if not args.no_plot:
-            plot_single_result(img, img_array, sorted_colors, display_name,
+            plot_single_result(img, img_array, sorted_colors, args.method, display_name,
                              args.output, dpi=args.dpi)
 
     # print("\nDone!")
