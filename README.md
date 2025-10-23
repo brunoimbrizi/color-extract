@@ -7,7 +7,7 @@ A toolkit to extract dominant colors from images using various K-Means clusterin
 
 | Example |
 | :------ | 
-| <img width="1256" height="492" alt="colors_Additional_073_all_6" src="https://github.com/user-attachments/assets/54c4f889-4195-4054-9f82-e098325745d0" /> |
+| <img width="1256" alt="colors_Additional_073_all_6" src="https://github.com/user-attachments/assets/54c4f889-4195-4054-9f82-e098325745d0" /> |
 
 ## Features
 
@@ -81,11 +81,11 @@ Options:
 
 | Aggressive Weighting | LAB Enhanced |
 | -------------------- | ------------ |
-| <img width="880" height="820" alt="colors_OilDrums_aggressive_6" src="https://github.com/user-attachments/assets/b7d4f23c-efbe-4bb5-9563-085c806f6e02" /> | <img width="880" height="820" alt="colors_Additional_847_lab_6" src="https://github.com/user-attachments/assets/f2edc380-aff7-4e21-bf36-8fc2a80e30a1" /> |
+| <img width="880" alt="colors_OilDrums_aggressive_6" src="https://github.com/user-attachments/assets/b7d4f23c-efbe-4bb5-9563-085c806f6e02" /> | <img width="880" alt="colors_Additional_847_lab_6" src="https://github.com/user-attachments/assets/f2edc380-aff7-4e21-bf36-8fc2a80e30a1" /> |
 
 | Multi-stage | K-Means |
 | ----------- | ------- |
-| <img width="880" height="820" alt="colors_Additional_1974_multistage_6" src="https://github.com/user-attachments/assets/5f3219b4-3ecc-47fb-940f-147f9fc089b3" /> | <img width="880" height="820" alt="colors_Additional_0966_kmeans_6" src="https://github.com/user-attachments/assets/eda3e631-132c-44da-ade7-ffecd9a2b426" /> |
+| <img width="880" alt="colors_Additional_1974_multistage_6" src="https://github.com/user-attachments/assets/5f3219b4-3ecc-47fb-940f-147f9fc089b3" /> | <img width="880" alt="colors_Additional_0966_kmeans_6" src="https://github.com/user-attachments/assets/eda3e631-132c-44da-ade7-ffecd9a2b426" /> |
 
 
 
