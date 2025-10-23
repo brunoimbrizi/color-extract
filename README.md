@@ -37,22 +37,25 @@ color-extract image.jpg
 # Extract 8 colors using the vibrant method
 color-extract image.jpg -c 8 -m vibrant
 
-# Compare all methods
-color-extract image.jpg -m all -o comparison.png
+# Compare all methods and define output folder
+color-extract image.jpg -m all -o ./my-folder
 ```
 
 ### Example Output
 ```
-LAB Enhanced:
-========================================
-  1. #277595    RGB(39, 117, 149)
-  2. #68b2c6    RGB(104, 178, 198)
-  3. #6c6963    RGB(108, 105, 99)
-  4. #394d4d    RGB(57, 77, 77)
-  5. #782722    RGB(120, 39, 34)
-  6. #102937    RGB(16, 41, 55)
+┌─────────────────────────────────────┐
+│ LAB Enhanced                        │
+└─────────────────────────────────────┘
+┌───────┬──────────┬──────────────────┐
+│  ■■■  │ #277595  │ (39, 117, 149)   │
+│  ■■■  │ #68b2c6  │ (104, 178, 198)  │
+│  ■■■  │ #6c6963  │ (108, 105, 99)   │
+│  ■■■  │ #394d4d  │ (57, 77, 77)     │
+│  ■■■  │ #782722  │ (120, 39, 34)    │
+│  ■■■  │ #102937  │ (16, 41, 55)     │
+└───────┴──────────┴──────────────────┘
 
-Result saved to palette_image_lab_6.png
+Result saved to output/colors_image_lab_6.png
 ```
 
 ## CLI Options
@@ -67,8 +70,8 @@ Options:
   -h, --help           Show help message
   --colors, -c         Number of colors to extract (default: 6)
   --method, -m         Extraction method (default: lab)
-  --output, -o         Output file path
-  --no-plot            Disable plot generation (console output only)
+  --output, -o         Output file path (default: ./output)
+  --no-plot            Disable plot generation
   --sort               Color sorting: (default: x-axis)
   --max-dimension      Max dimension for downscaling (default: 64)
   --dpi                DPI for output plots (default: 150)

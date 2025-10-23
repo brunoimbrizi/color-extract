@@ -13,7 +13,7 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="color-extract",
-    version="0.0.1",
+    version="0.0.2",
     packages=find_packages(),
     python_requires=">=3.7",
 )

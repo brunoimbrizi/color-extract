@@ -5,7 +5,7 @@ A comprehensive toolkit for color extraction with support for multiple algorithm
 spatial color sorting, and both CLI and programmatic usage.
 """
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 __author__ = 'Bruno Imbrizi'
 __email__ = 'your.email@example.com'
 

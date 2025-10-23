@@ -5,6 +5,7 @@ Command-line interface for color extraction.
 import argparse
 import os
 import re
+import pathlib
 
 from . import EXTRACTION_METHODS
 from . import load_and_prepare_image, sort_colors_by_spatial_position
@@ -36,21 +37,27 @@ Available methods:
     parser.add_argument('image', help='Path to the input image')
     parser.add_argument('--colors', '-c', type=int, default=6, help='Number of colors to extract (default: 6)')
     parser.add_argument('--method', '-m', default='lab', choices=list(EXTRACTION_METHODS.keys()) + ['all'], help='Extraction method (default: lab)')
-    parser.add_argument('--output', '-o', default=None, help='Output file path (default: palette_{input_name}_{method}_{colors}.png)')
-    parser.add_argument('--no-plot', action='store_true', help='Disable plot generation (console output only)')
+    parser.add_argument('--output', '-o', default=None, help='Output file path (default: ./output')
+    parser.add_argument('--no-plot', action='store_true', help='Disable plot generation')
     parser.add_argument('--sort', choices=['x-axis', 'y-axis', 'frequency'], default='x-axis', help='Color sorting method (default: x-axis)')
     parser.add_argument('--max-dimension', type=int, default=64, help='Maximum dimension for image downscaling (default: 64)')
     parser.add_argument('--dpi', type=int, default=150, help='DPI for output plots (default: 150)')
 
     args = parser.parse_args()
 
-    # Generate safe output filename if not specified and plotting is enabled
-    if not args.no_plot and args.output is None:
-        # Get the base filename without path and extension
-        base_name = os.path.splitext(os.path.basename(args.image))[0]
-        # Remove or replace unsafe characters
-        safe_name = re.sub(r'[^\w\-]', '_', base_name)
-        args.output = f'palette_{safe_name}_{args.method}_{args.colors}.png'
+    # Output path
+    output_path = pathlib.Path(args.output or './output')
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    # Get the base filename without path and extension
+    base_name = os.path.splitext(os.path.basename(args.image))[0]
+    # Remove or replace unsafe characters
+    safe_name = re.sub(r'[^\w\-]', '_', base_name)
+    # Compose filename
+    filename = f'colors_{safe_name}_{args.method}_{args.colors}.png'
+
+    if args.output is None or output_path.is_dir() or (not output_path.exists() and not output_path.suffix):
+       args.output = f"{output_path}/{filename}"
 
     # Load image
     # print(f"Loading image: {args.image}")
