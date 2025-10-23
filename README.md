@@ -1,13 +1,13 @@
-# Color Extract
+# color-extract
 
 [![PyPI version](https://badge.fury.io/py/color-extract.svg)](https://badge.fury.io/py/color-extract)
 [![Python Support](https://img.shields.io/pypi/pyversions/color-extract.svg)](https://pypi.org/project/color-extract/)
 
 A toolkit to extract dominant colors from images using various K-Means clustering approaches.
 
-| Example A | Example B | Example C |
-| --- | --- | --- |
-| <img width="400" alt="palette_Additional_073_all_6" src="https://github.com/user-attachments/assets/8ab11547-8c88-4b6c-97cd-b192c4697686" /> | <img width="400" alt="palette_OilDrums_all_6" src="https://github.com/user-attachments/assets/93fb3716-c059-4148-9e51-69b46553e910" /> | <img width="400" alt="palette_Additional_847_all_6" src="https://github.com/user-attachments/assets/a59cce63-2b28-439e-b3b7-1851ed69e99e" /> |
+| Example |
+| :------ | 
+| <img width="1256" height="492" alt="colors_Additional_073_all_6" src="https://github.com/user-attachments/assets/54c4f889-4195-4054-9f82-e098325745d0" /> |
 
 ## Features
 
@@ -76,6 +76,18 @@ Options:
   --max-dimension      Max dimension for downscaling (default: 64)
   --dpi                DPI for output plots (default: 150)
 ```
+
+## More Examples
+
+| Aggressive Weighting | LAB Enhanced |
+| -------------------- | ------------ |
+| <img width="880" height="820" alt="colors_OilDrums_aggressive_6" src="https://github.com/user-attachments/assets/b7d4f23c-efbe-4bb5-9563-085c806f6e02" /> | <img width="880" height="820" alt="colors_Additional_847_lab_6" src="https://github.com/user-attachments/assets/f2edc380-aff7-4e21-bf36-8fc2a80e30a1" /> |
+
+| Multi-stage | K-Means |
+| ----------- | ------- |
+| <img width="880" height="820" alt="colors_Additional_1974_multistage_6" src="https://github.com/user-attachments/assets/5f3219b4-3ecc-47fb-940f-147f9fc089b3" /> | <img width="880" height="820" alt="colors_Additional_0966_kmeans_6" src="https://github.com/user-attachments/assets/eda3e631-132c-44da-ade7-ffecd9a2b426" /> |
+
+
 
 ## Python API Usage
 
@@ -176,7 +188,6 @@ fig = plot_comparison(img, img_array, algorithms_dict, 'comparison.png')
 # Create simple palette image
 palette_array = create_color_palette_image(colors, width=100, height=100)
 ```
-
 
 ## Further Reading
 
