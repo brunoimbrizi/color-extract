@@ -187,7 +187,7 @@ def plot_comparison(img, img_array, algorithms_dict, output_path=None, dpi=150):
 
     # Paste original image in left column (centered)
     img_x = (left_column_width - img_width) // 2
-    img_y = title_height + (max_img_height - img_height) // 2
+    img_y = title_height
     composite.paste(img_copy, (img_x, img_y))
 
     # Draw title
@@ -196,7 +196,6 @@ def plot_comparison(img, img_array, algorithms_dict, output_path=None, dpi=150):
     title_x = img_x
     title_y = 30
     draw.text((title_x, title_y), title_text, fill='black', font=title_font)
-
 
     # Draw color palettes in right column
     palette_start_y = 20
