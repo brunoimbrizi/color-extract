@@ -38,7 +38,7 @@ color-extract image.jpg
 color-extract image.jpg -c 8 -m vibrant
 
 # Compare all methods and define output folder
-color-extract image.jpg -m all -o ./my-folder
+color-extract image.jpg -m all -o ./myfolder
 ```
 
 ### CLI Options
@@ -62,7 +62,7 @@ Options:
 
 ## Output Examples
 
-### Console
+**Console**
 ```
 ┌─────────────────────────────────────┐
 │ LAB Enhanced                        │
@@ -78,7 +78,7 @@ Options:
 Result saved to output/colors_image_lab_6.png
 ```
 
-### Rendered Images
+**Plotted Images**
 
 | Aggressive Weighting | LAB Enhanced |
 | -------------------- | ------------ |
@@ -122,18 +122,20 @@ plot_single_result(img, img_array, sorted_colors, 'LAB Enhanced', 'output.png')
 
 ### Main Functions
 
-#### `extract_colors(image, method='lab', n_colors=6, sort_by='x-axis')`
-
 Main convenience function for color extraction.
 
-**Parameters:**
-- `image`: File path (str) or numpy array (H, W, 3)
-- `method`: Extraction method name
-- `n_colors`: Number of colors to extract
-- `sort_by`: Sorting method ('x-axis', 'y-axis', 'frequency')
+```python
+colors = extract_colors(image, method='lab', n_colors=6, sort_by='x-axis')
 
-**Returns:**
-- List of RGB tuples
+# Parameters:
+# - image: File path (str) or numpy array (H, W, 3)
+# - method: Extraction method name ('kmeans', 'aggressive', 'vibrant', 'lab', 'multstage')
+# - n_colors: Number of colors to extract
+# - sort_by: Sorting method ('x-axis', 'y-axis', 'frequency')
+
+# Returns:
+# - List of RGB tuples
+```
 
 ### Individual Extraction Methods
 
