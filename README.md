@@ -24,8 +24,13 @@ A toolkit to extract dominant colors from images using various K-Means clusterin
 
 ## Installation
 
+With pip:
 ```bash
 pip install color-extract
+```
+Or with uv:
+```bash
+uv add color-extract
 ```
 
 ## Command Line Usage
@@ -54,8 +59,8 @@ Options:
   --colors, -c         Number of colors to extract (default: 6)
   --method, -m         Extraction method (default: lab)
   --output, -o         Output file path (default: ./output)
+  --sort, -s           Sorting method: (default: x-axis)
   --no-plot            Disable plot generation
-  --sort               Color sorting: (default: x-axis)
   --max-dimension      Max dimension for downscaling (default: 64)
   --dpi                DPI for output plots (default: 150)
 ```
@@ -156,40 +161,6 @@ colors = extract_colors_vibrant_separate(img_array, n_colors=6, n_vibrant=3)
 
 # Multi-stage extraction
 colors = extract_colors_multistage(img_array, n_colors=6)
-```
-
-### Utility Functions
-
-```python
-# Color conversion
-hex_color = rgb_to_hex((255, 128, 0))  # Returns '#ff8000'
-rgb = hex_to_rgb('#ff8000')  # Returns (255, 128, 0)
-
-# Spatial sorting
-sorted_colors = sort_colors_by_spatial_position(img_array, colors, axis='x')
-
-# Calculate statistics
-stats = calculate_color_statistics(img_array, colors)
-
-# Normalize arrays (useful for TouchDesigner)
-normalized = normalize_image_array(array, input_range=(0, 1), output_range=(0, 255))
-```
-
-### Visualization Functions
-
-```python
-# Plot single result
-fig = plot_single_result(img, img_array, colors, 'Method Name', 'output.png')
-
-# Compare multiple methods
-algorithms_dict = {
-    'Method 1': colors1,
-    'Method 2': colors2
-}
-fig = plot_comparison(img, img_array, algorithms_dict, 'comparison.png')
-
-# Create simple palette image
-palette_array = create_color_palette_image(colors, width=100, height=100)
 ```
 
 ## Further Reading

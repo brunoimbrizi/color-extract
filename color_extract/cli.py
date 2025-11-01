@@ -39,8 +39,8 @@ Available methods:
     parser.add_argument('--colors', '-c', type=int, default=6, help='Number of colors to extract (default: 6)')
     parser.add_argument('--method', '-m', default='lab', choices=list(EXTRACTION_METHODS.keys()) + ['all'], help='Extraction method (default: lab)')
     parser.add_argument('--output', '-o', default=None, help='Output file path (default: ./output')
+    parser.add_argument('--sort', '-s', default='x-axis', choices=['x-axis', 'y-axis', 'frequency'], help='Sorting method (default: x-axis)')
     parser.add_argument('--no-plot', action='store_true', help='Disable plot generation')
-    parser.add_argument('--sort', choices=['x-axis', 'y-axis', 'frequency'], default='x-axis', help='Color sorting method (default: x-axis)')
     parser.add_argument('--max-dimension', type=int, default=64, help='Maximum dimension for image downscaling (default: 64)')
     parser.add_argument('--dpi', type=int, default=150, help='DPI for output plots (default: 150)')
 
